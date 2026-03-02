@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Stake Yard | Fort Wayne's Wooden Stake Specialist</title>
+    
+    <!-- Google Fonts: Oswald (Industrial/Headlines) & Inter (Clean Text) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Oswald:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        wood: {
+                            50: '#f7f3ef',
+                            100: '#ede0d4',
+                            200: '#dbc1a7',
+                            300: '#c69f78',
+                            400: '#b07d4f',
+                            500: '#966036', /* Primary Wood Color */
+                            600: '#7d4a2b',
+                            700: '#633824',
+                            800: '#4d2d20', /* Dark Wood */
+                            900: '#3e251b',
+                        },
+                        industrial: {
+                            orange: '#ff6b00', /* Safety Orange Accent */
+                            gray: '#2d3748',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Oswald', 'sans-serif'],
+                    },
+                    backgroundImage: {
+                        'wood-pattern': "url('https://images.unsplash.com/photo-1589939705384-5185137a7f0f?q=80&w=2070&auto=format&fit=crop')",
+                        'construction': "url('https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=2070&auto=format&fit=crop')",
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom smooth scroll behavior */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        .hero-overlay {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.5));
+        }
+
+        .modal-enter {
+            opacity: 0;
+            transform: scale(0.95);
+        }
+        
+        .modal-enter-active {
+            opacity: 1;
+            transform: scale(1);
+            transition: opacity 300ms, transform 300ms;
+        }
+
+        .modal-exit {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        .modal-exit-active {
+            opacity: 0;
+            transform: scale(0.95);
+            transition: opacity 200ms, transform 200ms;
+        }
+
+        /* Stake Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+        }
+        
+        @keyframes flutter {
+            0%, 100% { transform: rotate(0deg) scaleX(1); }
+            50% { transform: rotate(-5deg) scaleX(0.9); }
+        }
+
+        @keyframes sway {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(10deg); }
+        }
+
+        /* NEW: Hammer Smash Animation */
+        @keyframes hammer-smash {
+            0% { transform: rotate(-45deg); }
+            30% { transform: rotate(-60deg); } /* Wind up */
+            100% { transform: rotate(0deg); } /* Impact */
+        }
+
+        .wood-texture {
+            background-image: repeating-linear-gradient(45deg, rgba(0,0,0,0.02) 0px, rgba(0,0,0,0.02) 2px, transparent 2px, transparent 4px);
+        }
+    </style>
+</head>
+<body class="bg-wood-50 text-industrial-gray font-sans antialiased">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 bg-white/95 backdrop-blur-sm shadow-md transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center gap-2">
+                    <i class="fa-solid fa-layer-group text-wood-600 text-3xl"></i>
+                    <div class="flex flex-col">
+                        <span class="font-display font-bold text-2xl tracking-wide text-wood-800 uppercase leading-none">The Stake Yard</span>
+                        <span class="text-xs text-wood-500 font-semibold tracking-wider">FORT WAYNE, IN</span>
+                    </div>
+                </div>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#about" class="text-gray-700 hover:text-wood-600 font-medium transition">About Us</a>
+                    <a href="#products" class="text-gray-700 hover:text-wood-600 font-medium transition">Our Stakes</a>
+                    <a href="#contact" class="text-gray-700 hover:text-wood-600 font-medium transition">Contact</a>
+                    <div class="flex items-center gap-4">
+                        <a href="tel:2604508511" class="flex items-center gap-2 text-wood-700 font-bold hover:text-wood-900">
+                            <i class="fa-solid fa-phone"></i> (260) 450-8511
+                        </a>
+                        <a href="#contact" class="bg-industrial-orange hover:bg-orange-600 text-white px-6 py-2.5 rounded-md font-display font-bold uppercase tracking-wider shadow-lg transform hover:-translate-y-0.5 transition duration-200">
+                            Get Quote
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button onclick="toggleMobileMenu()" class="text-gray-700 hover:text-wood-600 focus:outline-none">
+                        <i class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#about" class="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-wood-50 rounded-md">About Us</a>
+                <a href="#products" class="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-wood-50 rounded-md">Our Stakes</a>
+                <a href="#contact" class="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-wood-50 rounded-md">Contact</a>
+                <a href="tel:2604508511" class="block px-3 py-2 text-base font-bold text-wood-700 bg-wood-50 rounded-md">
+                    <i class="fa-solid fa-phone mr-2"></i> Call Now
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative h-[85vh] min-h-[600px] flex items-center justify-center bg-construction bg-cover bg-center bg-fixed bg-no-repeat">
+        <div class="absolute inset-0 hero-overlay"></div>
+        <div class="relative z-10 text-center px-4 max-w-4xl mx-auto">
+            <span class="inline-block py-1 px-3 rounded-full bg-industrial-orange/90 text-white text-sm font-bold tracking-widest uppercase mb-6 shadow-md backdrop-blur-sm border border-white/20">
+                Serving Greater Fort Wayne & Beyond
+            </span>
+            <h1 class="font-display font-bold text-5xl md:text-7xl text-white mb-6 leading-tight drop-shadow-lg">
+                Built to Grade.<br>
+                <span class="text-industrial-orange">Engineered to Break.</span>
+            </h1>
+            <p class="text-gray-100 text-lg md:text-xl mb-10 max-w-2xl mx-auto font-light leading-relaxed">
+                The region's premier supplier of wooden construction stakes. From softwood breakaway stakes for concrete pours to heavy-duty survey hubs.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="#products" class="bg-white text-wood-800 px-8 py-4 rounded-md font-display font-bold text-lg uppercase tracking-wider shadow-xl hover:bg-gray-100 transform hover:-translate-y-1 transition duration-300">
+                    View Catalog
+                </a>
+                <a href="#contact" class="bg-transparent border-2 border-white text-white px-8 py-4 rounded-md font-display font-bold text-lg uppercase tracking-wider hover:bg-white hover:text-wood-800 transition duration-300">
+                    Bulk Orders
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Intro / About Section -->
+    <section id="about" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <div class="relative">
+                    <div class="absolute -top-4 -left-4 w-24 h-24 bg-wood-100 rounded-full z-0"></div>
+                    <div class="absolute -bottom-4 -right-4 w-32 h-32 bg-industrial-orange/10 rounded-full z-0"></div>
+                    <img src="https://images.unsplash.com/photo-1534970028765-38ce47ef7d8d?q=80&w=1000&auto=format&fit=crop" alt="Pile of wooden stakes" class="relative z-10 rounded-lg shadow-2xl object-cover h-[500px] w-full">
+                </div>
+                <div>
+                    <h2 class="font-display font-bold text-4xl text-wood-800 mb-6">Reliable Wood Products for Tough Jobs.</h2>
+                    <p class="text-gray-600 mb-6 text-lg">
+                        Located right here in Fort Wayne, <strong>The Stake Yard</strong> understands the needs of local contractors. We don't just sell wood; we sell efficiency.
+                    </p>
+                    <p class="text-gray-600 mb-8 text-lg">
+                        Our specialty is the <strong>Softwood Breakaway Stake</strong>. Designed specifically for concrete forms, these stakes hold strong during the pour but snap cleanly below the concrete line when struck, saving your team hours of removal time and protecting your finished concrete work.
+                    </p>
+                    
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="flex items-start gap-4">
+                            <div class="bg-wood-100 p-3 rounded-lg text-wood-600">
+                                <i class="fa-solid fa-truck-fast text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-900">Fast Local Delivery</h4>
+                                <p class="text-sm text-gray-500">To job sites across NE Indiana.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="bg-wood-100 p-3 rounded-lg text-wood-600">
+                                <i class="fa-solid fa-layer-group text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-900">Bulk Discounts</h4>
+                                <p class="text-sm text-gray-500">Pallet pricing available.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Grid -->
+    <section id="products" class="py-20 bg-wood-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="font-display font-bold text-4xl text-wood-800 mb-4">Our Stake Catalog</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">
+                    Top-grade lumber milled for specific applications. Click any product below to learn more or request a quote.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                
+                <!-- Product 1: Breakaway (Star Product) -->
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden border-b-4 border-industrial-orange transform transition hover:-translate-y-2 hover:shadow-2xl group">
+                    <div class="h-48 relative bg-wood-100 flex justify-center items-end pb-8 overflow-hidden">
+                        <div class="absolute top-0 right-0 bg-industrial-orange text-white text-xs font-bold px-3 py-1 uppercase tracking-wider z-10">Best Seller</div>
+                        
+                        <!-- Sledgehammer Graphic (Rebuilt for connection) -->
+                        <div class="absolute top-6 left-0 w-full h-full z-20 pointer-events-none">
+                            <div class="absolute top-0 right-16 origin-right transform -rotate-[45deg] group-hover:animate-[hammer-smash_0.3s_ease-in_forwards]">
+                                <div class="flex items-center">
+                                    <!-- Head -->
+                                    <div class="w-12 h-8 bg-gray-700 rounded-sm border-r-4 border-gray-500 shadow-md z-10 relative"></div>
+                                    <!-- Handle (Negative margin to ensure connection) -->
+                                    <div class="w-28 h-2 bg-wood-800 rounded-r-sm shadow-sm -ml-2"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Animated CSS Graphic -->
+                        <div class="relative w-8 h-32 flex flex-col items-center transition-transform duration-500 group-hover:translate-y-1">
+                            <!-- Top Snapping Part (Added delay-300 to wait for hammer hit) -->
+                            <div class="w-full h-8 bg-wood-300 border-b border-wood-600 wood-texture origin-bottom-right transition-transform duration-200 delay-300 group-hover:rotate-[70deg] group-hover:translate-x-6 z-10"></div>
+                            <!-- Bottom Solid Part -->
+                            <div class="w-full h-24 bg-wood-400 wood-texture relative shadow-md">
+                                <!-- Point -->
+                                <div class="absolute top-full left-0 w-0 h-0 border-l-[16px] border-r-[16px] border-t-[24px] border-l-transparent border-r-transparent border-t-wood-400"></div>
+                            </div>
+                            <!-- Score Line Indicator -->
+                            <div class="absolute top-7 -right-4 text-industrial-orange text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-300">SNAP!</div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-display font-bold text-xl text-gray-900 mb-2">Concrete Breakaway Stakes</h3>
+                        <p class="text-gray-500 text-sm mb-4 h-16 line-clamp-3">Softwood pine designed to snap cleanly below the concrete grade. Essential for flatwork and foundations.</p>
+                        <button onclick="openModal('breakaway')" class="w-full py-3 border-2 border-wood-200 text-wood-700 font-bold rounded-lg hover:bg-wood-600 hover:text-white hover:border-wood-600 transition-colors">
+                            View Details
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Product 2: Survey -->
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden border-b-4 border-wood-500 transform transition hover:-translate-y-2 hover:shadow-2xl group">
+                    <div class="h-48 relative bg-wood-100 flex justify-center items-center overflow-hidden">
+                        <!-- Animated CSS Graphic -->
+                        <div class="relative flex items-end justify-center group-hover:scale-105 transition-transform duration-500">
+                            <!-- Lath (background) -->
+                            <div class="absolute -right-6 top-0 w-2 h-40 bg-wood-300 wood-texture transform rotate-12 opacity-80"></div>
+                            
+                            <!-- Hub (foreground) -->
+                            <div class="relative w-12 h-20 bg-wood-500 wood-texture shadow-lg flex flex-col">
+                                <!-- Painted Top -->
+                                <div class="w-full h-4 bg-pink-500"></div>
+                                <!-- Point -->
+                                <div class="absolute top-full left-0 w-0 h-0 border-l-[24px] border-r-[24px] border-t-[20px] border-l-transparent border-r-transparent border-t-wood-500"></div>
+                                <!-- Ribbon -->
+                                <div class="absolute -top-2 -right-6 w-10 h-3 bg-pink-500 shadow-sm origin-left" style="animation: flutter 2s infinite ease-in-out;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-display font-bold text-xl text-gray-900 mb-2">Survey Hubs & Lath</h3>
+                        <p class="text-gray-500 text-sm mb-4 h-16 line-clamp-3">Precision-milled hardwood hubs and markers. High visibility and durable enough for hard ground.</p>
+                        <button onclick="openModal('survey')" class="w-full py-3 border-2 border-wood-200 text-wood-700 font-bold rounded-lg hover:bg-wood-600 hover:text-white hover:border-wood-600 transition-colors">
+                            View Details
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Product 3: Garden -->
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden border-b-4 border-green-600 transform transition hover:-translate-y-2 hover:shadow-2xl group">
+                    <div class="h-48 relative bg-wood-100 flex justify-center items-end pb-8 overflow-hidden">
+                        <!-- Animated CSS Graphic -->
+                        <div class="relative w-4 h-36 bg-wood-200 wood-texture shadow-md group-hover:-translate-y-2 transition-transform duration-500">
+                             <!-- Point -->
+                             <div class="absolute top-full left-0 w-0 h-0 border-l-[8px] border-r-[8px] border-t-[24px] border-l-transparent border-r-transparent border-t-wood-200"></div>
+                             
+                             <!-- Leaf Accent -->
+                             <i class="fa-solid fa-leaf text-green-500 text-2xl absolute top-8 -right-5 drop-shadow-sm origin-bottom-left" style="animation: sway 3s infinite ease-in-out;"></i>
+                             <!-- Green Tie -->
+                             <div class="absolute top-14 left-0 w-full h-1 bg-green-600"></div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-display font-bold text-xl text-gray-900 mb-2">Garden & Landscape</h3>
+                        <p class="text-gray-500 text-sm mb-4 h-16 line-clamp-3">Smooth finish stakes for tree support, marking beds, and general landscape architecture.</p>
+                        <button onclick="openModal('garden')" class="w-full py-3 border-2 border-wood-200 text-wood-700 font-bold rounded-lg hover:bg-wood-600 hover:text-white hover:border-wood-600 transition-colors">
+                            View Details
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Product 4: Foundation/Grade -->
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden border-b-4 border-wood-800 transform transition hover:-translate-y-2 hover:shadow-2xl group">
+                    <div class="h-48 relative bg-wood-100 flex justify-center items-end pb-8 overflow-hidden">
+                        <!-- Animated CSS Graphic -->
+                        <div class="relative w-14 h-32 bg-wood-700 wood-texture shadow-xl flex flex-col justify-between group-hover:scale-105 transition-transform duration-300">
+                             <!-- Point -->
+                             <div class="absolute top-full left-0 w-0 h-0 border-l-[28px] border-r-[28px] border-t-[20px] border-l-transparent border-r-transparent border-t-wood-700"></div>
+                             
+                             <!-- Heavy Grain Lines -->
+                             <div class="w-full h-full opacity-20 bg-[url('https://www.transparenttextures.com/patterns/wood-pattern.png')]"></div>
+                             
+                             <!-- Top impact mark -->
+                             <div class="absolute top-0 w-full h-1 bg-black/20"></div>
+                        </div>
+                        <!-- Extra stake behind -->
+                        <div class="absolute bottom-6 ml-16 w-14 h-24 bg-wood-600 wood-texture shadow-lg -z-10 opacity-80">
+                             <div class="absolute top-full left-0 w-0 h-0 border-l-[28px] border-r-[28px] border-t-[20px] border-l-transparent border-r-transparent border-t-wood-600"></div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-display font-bold text-xl text-gray-900 mb-2">Foundation Grade Stakes</h3>
+                        <p class="text-gray-500 text-sm mb-4 h-16 line-clamp-3">Heavy-duty stakes for heavy loads. Perfect for forming retaining walls and structural concrete.</p>
+                        <button onclick="openModal('foundation')" class="w-full py-3 border-2 border-wood-200 text-wood-700 font-bold rounded-lg hover:bg-wood-600 hover:text-white hover:border-wood-600 transition-colors">
+                            View Details
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action Banner -->
+    <section class="py-16 bg-wood-800 relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10" style="background-image: url('https://www.transparenttextures.com/patterns/wood-pattern.png');"></div>
+        <div class="max-w-4xl mx-auto px-4 relative z-10 text-center">
+            <h2 class="font-display font-bold text-3xl md:text-4xl text-white mb-6">Need a Custom Size or Large Quantity?</h2>
+            <p class="text-wood-200 text-lg mb-8">We mill locally in Fort Wayne. If you need it, we can stake it.</p>
+            <a href="tel:2604508511" class="inline-flex items-center gap-3 bg-industrial-orange hover:bg-white hover:text-wood-800 text-white text-2xl md:text-4xl font-display font-bold py-4 px-8 rounded-lg transition-all duration-300 shadow-lg">
+                <i class="fa-solid fa-phone-volume animate-pulse"></i>
+                (260) 450-8511
+            </a>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 bg-wood-50 rounded-2xl shadow-xl overflow-hidden">
+                
+                <!-- Contact Info -->
+                <div class="p-10 bg-wood-700 text-white flex flex-col justify-between relative overflow-hidden">
+                    <div class="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 bg-wood-600 rounded-full opacity-50"></div>
+                    
+                    <div class="relative z-10">
+                        <h2 class="font-display font-bold text-3xl mb-2">Get In Touch</h2>
+                        <p class="text-wood-200 mb-8">Fill out the form or give us a call. We're ready to supply your next job.</p>
+                        
+                        <div class="space-y-6">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 bg-wood-600 rounded-full flex items-center justify-center text-industrial-orange">
+                                    <i class="fa-solid fa-phone text-xl"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-wood-300 uppercase font-bold tracking-wider">Phone</p>
+                                    <p class="font-bold text-xl">(260) 450-8511</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 bg-wood-600 rounded-full flex items-center justify-center text-industrial-orange">
+                                    <i class="fa-solid fa-location-dot text-xl"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-wood-300 uppercase font-bold tracking-wider">Location</p>
+                                    <p class="font-bold text-xl">Fort Wayne, Indiana Area</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 bg-wood-600 rounded-full flex items-center justify-center text-industrial-orange">
+                                    <i class="fa-solid fa-envelope text-xl"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-wood-300 uppercase font-bold tracking-wider">Email</p>
+                                    <p class="font-bold text-xl">orders@thestakeyard.com</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-12 relative z-10">
+                        <div class="flex gap-4">
+                            <a href="#" class="w-10 h-10 rounded-full bg-wood-600 hover:bg-industrial-orange flex items-center justify-center transition-colors"><i class="fa-brands fa-facebook-f"></i></a>
+                            <a href="#" class="w-10 h-10 rounded-full bg-wood-600 hover:bg-industrial-orange flex items-center justify-center transition-colors"><i class="fa-brands fa-instagram"></i></a>
+                            <a href="#" class="w-10 h-10 rounded-full bg-wood-600 hover:bg-industrial-orange flex items-center justify-center transition-colors"><i class="fa-brands fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form -->
+                <div class="p-10">
+                    <form onsubmit="event.preventDefault(); alert('Thank you! We will contact you shortly.');" class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-bold text-wood-800 mb-2" for="name">Full Name</label>
+                            <input type="text" id="name" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-industrial-orange focus:ring-2 focus:ring-orange-200 outline-none transition" placeholder="John Doe">
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-bold text-wood-800 mb-2" for="phone">Phone Number</label>
+                                <input type="tel" id="phone" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-industrial-orange focus:ring-2 focus:ring-orange-200 outline-none transition" placeholder="(260) ...">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-bold text-wood-800 mb-2" for="type">Stake Interest</label>
+                                <select id="type" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-industrial-orange focus:ring-2 focus:ring-orange-200 outline-none transition bg-white">
+                                    <option>Breakaway Concrete Stakes</option>
+                                    <option>Survey Hubs</option>
+                                    <option>Garden Stakes</option>
+                                    <option>General/Other</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-bold text-wood-800 mb-2" for="message">Message</label>
+                            <textarea id="message" rows="4" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-industrial-orange focus:ring-2 focus:ring-orange-200 outline-none transition" placeholder="Tell us about your project or quantity needs..."></textarea>
+                        </div>
+
+                        <button type="submit" class="w-full bg-wood-800 text-white font-bold py-4 rounded-lg uppercase tracking-widest hover:bg-wood-700 transition duration-300 shadow-md">
+                            Send Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-wood-900 text-wood-200 py-10 border-t border-wood-800">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <div class="flex items-center justify-center gap-2 mb-4">
+                <i class="fa-solid fa-layer-group text-industrial-orange text-xl"></i>
+                <span class="font-display font-bold text-2xl uppercase text-white">The Stake Yard</span>
+            </div>
+            <p class="text-sm text-wood-400 mb-8">&copy; 2024 The Stake Yard. All Rights Reserved. Fort Wayne, IN.</p>
+        </div>
+    </footer>
+
+    <!-- Modal Backdrop -->
+    <div id="productModal" class="fixed inset-0 z-[100] hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <!-- Backdrop -->
+        <div class="fixed inset-0 bg-gray-900 bg-opacity-75 transition-opacity cursor-pointer backdrop-blur-sm" onclick="closeModal()"></div>
+
+        <div class="fixed inset-0 z-10 overflow-y-auto">
+            <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
+                
+                <!-- Modal Panel -->
+                <div class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-4xl border-t-8 border-industrial-orange">
+                    
+                    <!-- Close Button -->
+                    <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 z-20">
+                        <i class="fa-solid fa-xmark text-3xl"></i>
+                    </button>
+
+                    <div class="flex flex-col md:flex-row">
+                        <!-- Left: Image & Info -->
+                        <div class="w-full md:w-1/2 bg-wood-50 p-8">
+                            <h3 id="modal-title" class="text-3xl font-display font-bold text-wood-800 mb-2">Product Name</h3>
+                            <div class="w-20 h-1 bg-industrial-orange mb-6"></div>
+                            
+                            <p id="modal-desc" class="text-gray-600 mb-6 text-lg leading-relaxed">
+                                Description goes here...
+                            </p>
+
+                            <div class="bg-white p-4 rounded-lg shadow-sm border border-wood-100">
+                                <h4 class="font-bold text-wood-800 mb-2"><i class="fa-solid fa-check text-green-500 mr-2"></i>Ideal For:</h4>
+                                <ul id="modal-features" class="space-y-2 text-gray-600 pl-6 list-disc">
+                                    <li>Feature 1</li>
+                                    <li>Feature 2</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Right: Quick Order Form -->
+                        <div class="w-full md:w-1/2 p-8 bg-white">
+                            <h4 class="text-xl font-bold text-gray-900 mb-4">Interested in this product?</h4>
+                            <p class="text-sm text-gray-500 mb-6">Fill out this quick form and we'll call you with pricing and availability.</p>
+                            
+                            <form onsubmit="event.preventDefault(); alert('Inquiry Sent!'); closeModal();" class="space-y-4">
+                                <input type="hidden" id="modal-product-type">
+                                <div>
+                                    <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Your Name</label>
+                                    <input type="text" class="w-full p-3 bg-gray-50 rounded border border-gray-200 focus:border-industrial-orange outline-none" placeholder="Name">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Phone</label>
+                                    <input type="tel" class="w-full p-3 bg-gray-50 rounded border border-gray-200 focus:border-industrial-orange outline-none" placeholder="(260) ...">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Est. Quantity Needed</label>
+                                    <input type="text" class="w-full p-3 bg-gray-50 rounded border border-gray-200 focus:border-industrial-orange outline-none" placeholder="e.g. 50 bundles">
+                                </div>
+                                <button class="w-full bg-wood-600 hover:bg-wood-800 text-white font-bold py-3 rounded uppercase transition duration-200">
+                                    Request Pricing
+                                </button>
+                                <div class="text-center">
+                                    <span class="text-gray-400 text-sm">or call directly</span><br>
+                                    <a href="tel:2604508511" class="font-bold text-industrial-orange hover:underline">(260) 450-8511</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Product Data Object
+        const products = {
+            breakaway: {
+                title: "Softwood Breakaway Stakes",
+                desc: "Our flagship product designed for concrete flatwork. Made from premium softwood (Pine/Spruce), these stakes are strong enough to be driven into the ground but engineered to snap cleanly when struck from the side. This allows you to 'fill' the concrete around the stake and break the top off later without damaging the fresh cure.",
+                features: ["Clean break functionality", "Protects green concrete", "Standard 1x2 and 2x2 dimensions", "Available in 12\", 18\", 24\" lengths"]
+            },
+            survey: {
+                title: "Survey Hubs & Lath",
+                desc: "Precision is key in surveying. Our hubs are milled from dense wood to withstand driving into hard-packed soil without splitting. Our lath is smooth-finished for easy writing and high visibility marking.",
+                features: ["Dense hardwood options", "Pointed tips for hard soil", "Smooth surface for marking", "Bundled for easy transport"]
+            },
+            garden: {
+                title: "Garden & Landscape Stakes",
+                desc: "Whether you are a commercial landscaper or a home gardener, our chemical-free wooden stakes are perfect for tree support, marking plant beds, or general outdoor structuring.",
+                features: ["Chemical-free / Safe for soil", "Rot-resistant options", "Various thicknesses available", "Esthetically pleasing natural look"]
+            },
+            foundation: {
+                title: "Foundation Grade Stakes",
+                desc: "Heavy-duty stakes designed for the rigorous demands of structural foundation forming. These can take a beating from a sledgehammer and hold heavy form boards in place under pressure.",
+                features: ["Heavy-duty load bearing", "Resists splitting", "Deep driving capability", "Perfect for retaining walls"]
+            }
+        };
+
+        // Modal Logic
+        function openModal(type) {
+            const modal = document.getElementById('productModal');
+            const data = products[type];
+
+            if(data) {
+                document.getElementById('modal-title').innerText = data.title;
+                document.getElementById('modal-desc').innerText = data.desc;
+                document.getElementById('modal-product-type').value = data.title;
+                
+                // Clear and rebuild features list
+                const list = document.getElementById('modal-features');
+                list.innerHTML = '';
+                data.features.forEach(feat => {
+                    const li = document.createElement('li');
+                    li.innerText = feat;
+                    list.appendChild(li);
+                });
+
+                modal.classList.remove('hidden');
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('productModal').classList.add('hidden');
+        }
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === "Escape") {
+                closeModal();
+            }
+        });
+
+        // Mobile Menu Logic
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+    </script>
+</body>
+</html>

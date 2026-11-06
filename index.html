@@ -437,20 +437,23 @@
 
                 <!-- Form -->
                 <div class="p-10">
-                    <form onsubmit="event.preventDefault(); alert('Thank you! We will contact you shortly.');" class="space-y-6">
+                    <form id="contact-form" action="https://formspree.io/f/mjyydvdv" method="POST" class="space-y-6" data-fs-form>
+                        <input type="hidden" name="_subject" value="New contact form message - The Stake Yard">
+                        <input type="hidden" name="form_source" value="Contact section">
+                        <input type="text" name="_gotcha" class="hidden" tabindex="-1" autocomplete="off">
                         <div>
                             <label class="block text-sm font-bold text-wood-800 mb-2" for="name">Full Name</label>
-                            <input type="text" id="name" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-industrial-orange focus:ring-2 focus:ring-orange-200 outline-none transition" placeholder="John Doe">
+                            <input type="text" id="name" name="name" required autocomplete="name" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-industrial-orange focus:ring-2 focus:ring-orange-200 outline-none transition" placeholder="John Doe">
                         </div>
                         
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label class="block text-sm font-bold text-wood-800 mb-2" for="phone">Phone Number</label>
-                                <input type="tel" id="phone" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-industrial-orange focus:ring-2 focus:ring-orange-200 outline-none transition" placeholder="(260) ...">
+                                <input type="tel" id="phone" name="phone" required autocomplete="tel" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-industrial-orange focus:ring-2 focus:ring-orange-200 outline-none transition" placeholder="(260) ...">
                             </div>
                             <div>
                                 <label class="block text-sm font-bold text-wood-800 mb-2" for="type">Stake Interest</label>
-                                <select id="type" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-industrial-orange focus:ring-2 focus:ring-orange-200 outline-none transition bg-white">
+                                <select id="type" name="stake_interest" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-industrial-orange focus:ring-2 focus:ring-orange-200 outline-none transition bg-white">
                                     <option>Breakaway Concrete Stakes</option>
                                     <option>Survey Hubs</option>
                                     <option>Garden Stakes</option>
@@ -461,12 +464,13 @@
 
                         <div>
                             <label class="block text-sm font-bold text-wood-800 mb-2" for="message">Message</label>
-                            <textarea id="message" rows="4" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-industrial-orange focus:ring-2 focus:ring-orange-200 outline-none transition" placeholder="Tell us about your project or quantity needs..."></textarea>
+                            <textarea id="message" name="message" rows="4" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-industrial-orange focus:ring-2 focus:ring-orange-200 outline-none transition" placeholder="Tell us about your project or quantity needs..."></textarea>
                         </div>
 
                         <button type="submit" class="w-full bg-wood-800 text-white font-bold py-4 rounded-lg uppercase tracking-widest hover:bg-wood-700 transition duration-300 shadow-md">
                             Send Message
                         </button>
+                        <p class="fs-status hidden text-center font-bold" role="status" aria-live="polite"></p>
                     </form>
                 </div>
             </div>
@@ -524,23 +528,27 @@
                             <h4 class="text-xl font-bold text-gray-900 mb-4">Interested in this product?</h4>
                             <p class="text-sm text-gray-500 mb-6">Fill out this quick form and we'll call you with pricing and availability.</p>
                             
-                            <form onsubmit="event.preventDefault(); alert('Inquiry Sent!'); closeModal();" class="space-y-4">
-                                <input type="hidden" id="modal-product-type">
+                            <form id="modal-form" action="https://formspree.io/f/mjyydvdv" method="POST" class="space-y-4" data-fs-form data-fs-close-modal>
+                                <input type="hidden" name="_subject" value="New pricing request - The Stake Yard">
+                                <input type="hidden" name="form_source" value="Product pricing modal">
+                                <input type="hidden" id="modal-product-type" name="product">
+                                <input type="text" name="_gotcha" class="hidden" tabindex="-1" autocomplete="off">
                                 <div>
                                     <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Your Name</label>
-                                    <input type="text" class="w-full p-3 bg-gray-50 rounded border border-gray-200 focus:border-industrial-orange outline-none" placeholder="Name">
+                                    <input type="text" name="name" required autocomplete="name" class="w-full p-3 bg-gray-50 rounded border border-gray-200 focus:border-industrial-orange outline-none" placeholder="Name">
                                 </div>
                                 <div>
                                     <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Phone</label>
-                                    <input type="tel" class="w-full p-3 bg-gray-50 rounded border border-gray-200 focus:border-industrial-orange outline-none" placeholder="(260) ...">
+                                    <input type="tel" name="phone" required autocomplete="tel" class="w-full p-3 bg-gray-50 rounded border border-gray-200 focus:border-industrial-orange outline-none" placeholder="(260) ...">
                                 </div>
                                 <div>
                                     <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Est. Quantity Needed</label>
-                                    <input type="text" class="w-full p-3 bg-gray-50 rounded border border-gray-200 focus:border-industrial-orange outline-none" placeholder="e.g. 50 bundles">
+                                    <input type="text" name="quantity" class="w-full p-3 bg-gray-50 rounded border border-gray-200 focus:border-industrial-orange outline-none" placeholder="e.g. 50 bundles">
                                 </div>
-                                <button class="w-full bg-wood-600 hover:bg-wood-800 text-white font-bold py-3 rounded uppercase transition duration-200">
+                                <button type="submit" class="w-full bg-wood-600 hover:bg-wood-800 text-white font-bold py-3 rounded uppercase transition duration-200">
                                     Request Pricing
                                 </button>
+                                <p class="fs-status hidden text-center font-bold" role="status" aria-live="polite"></p>
                                 <div class="text-center">
                                     <span class="text-gray-400 text-sm">or call directly</span><br>
                                     <a href="tel:2604508511" class="font-bold text-industrial-orange hover:underline">(260) 450-8511</a>
@@ -617,6 +625,52 @@
             const menu = document.getElementById('mobile-menu');
             menu.classList.toggle('hidden');
         }
+    </script>
+    <script>
+        // Formspree submission (AJAX, stays on page; falls back to normal POST if JS is off)
+        document.querySelectorAll('form[data-fs-form]').forEach(function (form) {
+            form.addEventListener('submit', async function (e) {
+                e.preventDefault();
+                const btn = form.querySelector('button[type="submit"]');
+                const status = form.querySelector('.fs-status');
+                const btnText = btn.innerHTML;
+                const show = function (msg, ok) {
+                    status.textContent = msg;
+                    status.classList.remove('hidden', 'text-green-600', 'text-red-600');
+                    status.classList.add(ok ? 'text-green-600' : 'text-red-600');
+                };
+                btn.disabled = true;
+                btn.classList.add('opacity-60', 'cursor-not-allowed');
+                btn.textContent = 'Sending...';
+                try {
+                    const res = await fetch(form.action, {
+                        method: 'POST',
+                        body: new FormData(form),
+                        headers: { 'Accept': 'application/json' }
+                    });
+                    if (res.ok) {
+                        const productField = form.querySelector('#modal-product-type');
+                        const product = productField ? productField.value : '';
+                        form.reset();
+                        if (productField) productField.value = product;
+                        show("Thank you! We'll contact you shortly.", true);
+                        if (form.hasAttribute('data-fs-close-modal')) {
+                            setTimeout(function () { status.classList.add('hidden'); closeModal(); }, 2000);
+                        }
+                    } else {
+                        const data = await res.json().catch(function () { return {}; });
+                        const msg = data.errors ? data.errors.map(function (er) { return er.message; }).join(', ') : '';
+                        show(msg || 'Sorry, something went wrong. Please call us at (260) 450-8511.', false);
+                    }
+                } catch (err) {
+                    show('Network error. Please try again or call (260) 450-8511.', false);
+                } finally {
+                    btn.disabled = false;
+                    btn.classList.remove('opacity-60', 'cursor-not-allowed');
+                    btn.innerHTML = btnText;
+                }
+            });
+        });
     </script>
 </body>
 </html>
